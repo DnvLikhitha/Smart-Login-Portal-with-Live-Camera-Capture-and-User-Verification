@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Login - Camera</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <a href="/logout" class="logout-btn">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </a>
+  
+  <div class="camera-container">
+    <div class="camera-header">
+      <h1><i class="fas fa-camera"></i> Face Recognition</h1>
+      <p>Position your face in the camera and capture your image.</p>
+    </div>
+    
+    <div class="camera-section">
+      <div class="video-container">
+        <video id="camera" autoplay playsinline></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <div class="capture-controls">
+          <button id="captureBtn" class="capture-btn">
+            <i class="fas fa-camera"></i> Capture Image
+          </button>
+        </div>
+      </div>
+      
+      <div class="preview-section" id="imagePreview" style="display: none;">
+        <h3><i class="fas fa-image"></i> Captured Image</h3>
+        <img id="capturedImage" class="preview-image" src="" alt="Captured Image">
+        <button id="acceptBtn" class="accept-btn">
+          <i class="fas fa-check"></i> Accept & Save
+        </button>
+        <button id="retakeBtn" class="capture-btn" style="margin-top: 10px;">
+          <i class="fas fa-redo"></i> Retake Photo
+        </button>
+        <div class="disclaimer">
+          <i class="fas fa-shield-alt"></i>
+          <strong>Privacy Notice:</strong> By accepting, you agree to image collection. 
+          Your image is stored securely.
+        </div>
+        <div id="message" class="success-message" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/static/script.js"></script>
+</body>
+</html>
