@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Smart Login Portal</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="User dashboard with comprehensive security and activity monitoring">
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <div class="dashboard-title">
+        <i class="fas fa-tachometer-alt"></i>
+        Smart Dashboard
+      </div>
+      <div class="user-info">
+        <div class="user-avatar">
+          {{ username[0].upper() if username else 'U' }}
+        </div>
+        <div>
+          <div style="font-weight: 600;">Welcome, {{ username or 'User' }}!</div>
+          <div style="font-size: 14px; opacity: 0.8;">{{ current_time }}</div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- User Statistics Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="card-title">Account Statistics</div>
+        </div>
+        <div class="card-content">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-number" id="loginCount">{{ login_count or 0 }}</span>
+              <span class="stat-label">Total Logins</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="accountAge">{{ account_age or '0' }}</span>
+              <span class="stat-label">Days Active</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="securityScore">{{ security_score or '85' }}%</span>
+              <span class="stat-label">Security Score</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="lastLogin">{{ last_login or 'Today' }}</span>
+              <span class="stat-label">Last Login</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Overview Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--success-gradient);">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="card-title">Security Overview</div>
+        </div>
+        <div class="card-content">
+          <div class="security-features">
+            <div class="security-item">
+              <i class="fas fa-check-circle security-icon"></i>
+              <span class="security-text">Two-Factor Authentication</span>
+            </div>
+            <div class="security-item">
+              <i class="fas fa-check-circle security-icon"></i>
+              <span class="security-text">Password Encryption</span>
+            </div>
+            <div class="security-item">
+              <i class="fas fa-check-circle security-icon"></i>
+              <span class="security-text">Session Management</span>
+            </div>
+            <div class="security-item">
+              <i class="fas fa-check-circle security-icon"></i>
+              <span class="security-text">Activity Monitoring</span>
+            </div>
+          </div>
+          <button style="margin-top: 20px; background: var(--success-gradient);">
+            <i class="fas fa-cog"></i> Security Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Activity Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--secondary-gradient);">
+            <i class="fas fa-history"></i>
+          </div>
+          <div class="card-title">Recent Activity</div>
+        </div>
+        <div class="card-content">
+          <ul class="activity-list" id="activityList">
+            <li class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-sign-in-alt"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Successful Login</div>
+                <div class="activity-time">Just now</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-icon" style="background: var(--success-gradient);">
+                <i class="fas fa-user-edit"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Profile Updated</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-icon" style="background: var(--danger-gradient);">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Security Settings Changed</div>
+                <div class="activity-time">1 day ago</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Profile Management Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--danger-gradient);">
+            <i class="fas fa-user-cog"></i>
+          </div>
+          <div class="card-title">Profile Management</div>
+        </div>
+        <div class="card-content">
+          <form id="profileForm">
+            <div class="form-group">
+              <label for="display_name">Display Name</label>
+              <input type="text" id="display_name" name="display_name" value="{{ username or '' }}" placeholder="Your display name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="your.email@example.com">
+            </div>
+            <button type="submit">
+              <i class="fas fa-save"></i> Update Profile
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- System Information Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div class="card-title">System Information</div>
+        </div>
+        <div class="card-content">
+          <div style="display: grid; gap: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+              <span style="font-weight: 500;">Browser:</span>
+              <span id="browserInfo">Loading...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+              <span style="font-weight: 500;">IP Address:</span>
+              <span id="ipAddress">{{ user_ip or 'Hidden' }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+              <span style="font-weight: 500;">Session ID:</span>
+              <span style="font-family: monospace; font-size: 12px;">{{ session_id or 'N/A' }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 8px;">
+              <span style="font-weight: 500;">Login Time:</span>
+              <span id="loginTime">{{ login_time or 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--success-gradient);">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="card-title">Quick Actions</div>
+        </div>
+        <div class="card-content">
+          <div style="display: grid; gap: 15px;">
+            <button style="background: var(--success-gradient);">
+              <i class="fas fa-key"></i> Change Password
+            </button>
+            <button style="background: var(--secondary-gradient);">
+              <i class="fas fa-download"></i> Download Data
+            </button>
+            <button style="background: var(--danger-gradient);">
+              <i class="fas fa-trash-alt"></i> Delete Account
+            </button>
+            <button style="background: var(--primary-gradient);">
+              <i class="fas fa-question-circle"></i> Help & Support
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/dashboard.js"></script>
+  <script>
+    // Update browser info
+    document.getElementById('browserInfo').textContent = navigator.userAgent.split(' ').pop();
+    
+    // Update login time
+    document.getElementById('loginTime').textContent = new Date().toLocaleString();
+    
+    // Add some interactive features
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate stats on load
+      const statNumbers = document.querySelectorAll('.stat-number');
+      statNumbers.forEach(stat => {
+        const finalValue = stat.textContent;
+        if (!isNaN(finalValue)) {
+          let currentValue = 0;
+          const increment = Math.ceil(finalValue / 50);
+          const timer = setInterval(() => {
+            currentValue += increment;
+            if (currentValue >= finalValue) {
+              currentValue = finalValue;
+              clearInterval(timer);
+            }
+            stat.textContent = currentValue;
+          }, 30);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
